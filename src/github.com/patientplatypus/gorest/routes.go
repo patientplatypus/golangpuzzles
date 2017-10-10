@@ -3,6 +3,10 @@ package main
 import (
 	"net/http"
 
+	"github.com/patientplatypus/gorest/users"
+
+	"github.com/patientplatypus/gorest/character"
+
 	"github.com/gorilla/mux"
 )
 
@@ -31,21 +35,33 @@ func NewRouter() *mux.Router {
 
 var routes = Routes{
 	Route{
-		"TodoIndex",
+		"ClassType",
 		"POST",
 		"/character/class",
-		ClassType,
+		character.ClassType,
 	},
 	Route{
-		"TodoIndex",
+		"RaceType",
 		"POST",
 		"/character/race",
-		RaceType,
+		character.RaceType,
 	},
 	Route{
-		"TodoIndex",
+		"BackgroundType",
 		"POST",
 		"/character/background",
-		BackgroundType,
+		character.BackgroundType,
+	},
+	Route{
+		"RegisterUser",
+		"POST",
+		"/users/registeruser",
+		users.RegisterUser,
+	},
+	Route{
+		"LoginUser",
+		"GET",
+		"/users/loginuser/{username}/{password}",
+		users.LoginUser,
 	},
 }
