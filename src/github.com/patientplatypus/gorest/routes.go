@@ -59,9 +59,27 @@ var routes = Routes{
 		users.RegisterUser,
 	},
 	Route{
-		"LoginUser",
+		"UserLogin",
+		"POST",
+		"/users/userlogin",
+		users.UserLogin,
+	},
+	Route{
+		"UserLogout",
+		"POST",
+		"/users/userlogout",
+		users.UserLogout,
+	},
+	Route{
+		"DeleteAll",
 		"GET",
-		"/users/loginuser/{username}/{password}",
-		users.LoginUser,
+		"/users/deleteallusers",
+		users.DeleteAllUsers,
+	},
+	Route{
+		"QueryAll",
+		"GET",
+		"/users/queryallusers",
+		users.QueryAllUsers,
 	},
 }

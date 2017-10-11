@@ -10,12 +10,7 @@ type Sqlconfig struct {
 	dbname   string
 }
 
-// func (post *Post) Create() (err error) {
-// 	err = Db.QueryRow("insert into posts (content, author) values ($1, $2) returning id", post.Content, post.Author).Scan(&post.Id)
-// 	return
-// }
-
-func Sql_config() (sqlconfig *Sqlconfig) {
+func Sql_config() (sqlconfig Sqlconfig) {
 	// panic("it works!")
 	fmt.Println("Inside Sql_config")
 	returnsql := Sqlconfig{
@@ -26,6 +21,7 @@ func Sql_config() (sqlconfig *Sqlconfig) {
 		dbname:   "dungeon_world"}
 
 	fmt.Println("Value of returnsql: ", returnsql)
+	fmt.Println("returnsql.host: ", returnsql.host)
 
-	return &returnsql
+	return returnsql
 }
