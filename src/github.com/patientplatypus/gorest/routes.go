@@ -5,6 +5,8 @@ import (
 
 	"github.com/patientplatypus/gorest/users"
 
+	"github.com/patientplatypus/gorest/dungeon_db"
+
 	"github.com/patientplatypus/gorest/character"
 
 	"github.com/gorilla/mux"
@@ -81,5 +83,29 @@ var routes = Routes{
 		"GET",
 		"/users/queryallusers",
 		users.QueryAllUsers,
+	},
+	Route{
+		"ClassType",
+		"GET",
+		"/populate/classtype",
+		dungeon.ClassType,
+	},
+	Route{
+		"RaceType",
+		"GET",
+		"/populate/racetype",
+		dungeon.RaceType,
+	},
+	// Route{
+	// 	"BackgroundType",
+	// 	"GET",
+	// 	"/populate/backgroundtype",
+	// 	dungeon.BackgroundType,
+	// },
+	Route{
+		"DeleteAllDungeonTypes",
+		"GET",
+		"/populate/deletealldungeontypes",
+		dungeon.DeleteAllDungeonTypes,
 	},
 }

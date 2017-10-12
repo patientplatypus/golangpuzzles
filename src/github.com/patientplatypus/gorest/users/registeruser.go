@@ -18,7 +18,7 @@ func (user *User) Create() {
 	} else if err == sql.ErrNoRows {
 		// empty result
 		fmt.Println("no rows from sql and err is: ", err)
-		db.QueryRow("insert into users (username, password, id) values ($1, $2, $3)", user.Username, user.Password, rand.Intn(999999))
+		db.QueryRow("insert into users (username, password, id) values ($1, $2, $3);", user.Username, user.Password, rand.Intn(999999))
 		fmt.Println("User inserted and rows is equal to: ", err)
 	} else {
 		// error
