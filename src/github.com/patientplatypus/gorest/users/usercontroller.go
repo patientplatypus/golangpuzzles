@@ -1,16 +1,11 @@
 package users
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 )
-
-type User struct {
-	Username string
-	Password string
-	Id       int
-}
 
 func DeleteAllUsers(w http.ResponseWriter, r *http.Request) {
 	//super duper dangerous - Axe in production!
@@ -41,13 +36,30 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+type User struct {
+	Username string
+	Password string
+	Id       int
+}
+
 func UserLogin(w http.ResponseWriter, r *http.Request) {
-	username := r.FormValue("username")
-	password := r.FormValue("password")
+
+	decoder := json.NewDecoder(r.Body)
+
+	var loginjson User
+	err := decoder.Decode(&loginjson)
+
+	if err != nil {
+		panic(err)
+	}
+
+	username := loginjson.Username
+	password := loginjson.Password
+
+	log.Print("username: ", username)
+	log.Print("password: ", password)
 	if username != "" && password != "" {
-		log.Print("username and passwords not blank!")
-		user := User{Username: username, Password: password}
-		user.Login(w, r)
+		loginjson.Login(w, r)
 	} else {
 		fmt.Fprintln(w, "error username or password is blank!")
 	}

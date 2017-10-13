@@ -26,7 +26,21 @@ func RegisterCharacter(charactername string) {
 
 		usercharacter := UserCharacters{
 			Character: []ACharacter{
-				{CharactersName: charactername},
+				{CharactersName: charactername,
+					CharacterData: CharacterStruct{
+						UserInput: UserInput{
+							Choices: []Choices{
+								{ChoiceName: "character class",
+									Options:          []string{"Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"},
+									PlacementAddress: []string{"character", "characterdata", "raceclassbackground", "characterclass"}},
+								{ChoiceName: "character race",
+									Options:          []string{"Dwarf", "Elf", "Halfling", "Human", "Human", "Dragonborn", "Gnome", "Half Elf", "Half Orc", "Tiefling"},
+									PlacementAddress: []string{"character", "characterdata", "raceclassbackground", "characterrace"}},
+								{ChoiceName: "character background",
+									Options:          []string{"Acolyte", "Charlatan", "Criminal", "Entertainer", "Folk Hero", "Guild Artisan", "Hermit", "Noble", "Outlander", "Sage", "Sailor", "Soldier", "Urchin"},
+									PlacementAddress: []string{"character", "characterdata", "raceclassbackground", "characterrace"}},
+							},
+						}}},
 			}}
 
 		datacharacter, err := json.Marshal(usercharacter)
@@ -36,6 +50,7 @@ func RegisterCharacter(charactername string) {
 		}
 
 		config.DB.QueryRow("insert into usercharacters (usernames, characters) values ($1, $2);", Username, datacharacter)
+
 	} else {
 		var databasecharacters UserCharacters
 		var datarows []byte
@@ -71,21 +86,4 @@ func RegisterCharacter(charactername string) {
 		}
 
 	}
-
-	//   UPDATE Customers
-	// SET ContactName = 'Alfred Schmidt', City= 'Frankfurt'
-	// WHERE CustomerID = 1;
-
-	// usercharacter := UserCharacters{
-	// 	Character: []ACharacter{
-	// 		{CharactersName: "John"},
-	// 	}}
-	//
-	// newcharacter := ACharacter{
-	// 	CharactersName: "Dave",
-	// }
-	//
-	// usercharacter.Character = append(usercharacter.Character, newcharacter)
-
-	// log.Print(usercharacter)
 }

@@ -15,7 +15,24 @@ type CharacterStruct struct {
 	Equipment                []string                      `json:"equipment"`
 	SkillsProficienciesSaves SkillsProficienciesAdvantages `json:"skillsproficienciesadvantages"`
 	Spells                   []string                      `json:"spells"`
-	Fluff                    Fluff                         `json:"Fluf"`
+	Fluff                    Fluff                         `json:"fluf"`
+	UserInput                UserInput                     `json:"userinput"`
+}
+
+type UserInput struct {
+	Choices []Choices `json:"choices"`
+	Answers []Answers `json:"answers"`
+}
+
+type Choices struct {
+	ChoiceName       string   `json:"choicename"`
+	Options          []string `json:"options"`
+	PlacementAddress []string `json:"placementaddress"`
+	PickNumber       int      `json:"picknumber"`
+}
+
+type Answers struct {
+	Answers []string `json:"answers"`
 }
 
 type Fluff struct{}
@@ -23,24 +40,22 @@ type Fluff struct{}
 type RaceClassBackground struct {
 	Race       string `json:"characterrace"`
 	SubRace    string `json:"charactersubrace"`
-	Class      string `json:"characerbackground"`
+	Class      string `json:"characerclass"`
 	Background string `json:"characterbackground"`
 }
 
 type SkillsProficienciesAdvantages struct {
-	Skills        []string      `json:"skills"`
 	Proficiencies Proficiencies `json:"proficiencies"`
 	Advantages    []string      `json:"advantages"`
 	Resistances   []string      `json:"resistances"`
 }
 
 type Proficiencies struct {
-	Armor           []string `json:"armor"`
-	Weapons         []string `json:"weapons"`
-	Tools           []string `json:"tools"`
-	SavingThrows    []string `json:"savingthrows"`
-	Skills          []string `json:"skills"`
-	BaseSkillNumber int      `json:"baseskillnumber"`
+	Armor        []string `json:"armor"`
+	Weapons      []string `json:"weapons"`
+	Tools        []string `json:"tools"`
+	SavingThrows []string `json:"savingthrows"`
+	Skills       []string `json:"skills"`
 }
 
 type CharacterNumbers struct {

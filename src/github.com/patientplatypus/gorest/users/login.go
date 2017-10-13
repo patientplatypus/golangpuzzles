@@ -7,17 +7,31 @@ import (
 	"github.com/patientplatypus/gorest/config"
 )
 
-func (user *User) Login(w http.ResponseWriter, r *http.Request) {
+func (loginjson *User) Login(w http.ResponseWriter, r *http.Request) {
 	session, _ := config.KeyStore().Get(r, "cookie-name")
-	if err := config.DB.QueryRow("SELECT username FROM users WHERE username=$1;", &user.Username).Scan(&user.Username); err == nil {
+	log.Print("After assigning session in login")
+	log.Print("loginjson: ", loginjson)
+	log.Print("&loginjson.Username: ", &loginjson.Username)
+	log.Print("loginjson.Username: ", loginjson.Username)
+	// marshalledusername, error := json.Marshal(loginjson.Username)
+	// if error != nil {
+	// 	panic(error)
+	// }
+	var tempvar string
+
+	config.DB.QueryRow("SELECT username FROM users WHERE username=$1;", loginjson.Username).Scan(tempvar)
+	// log.Print("err: ", err)
+	log.Print("got to here")
+	var err string
+	if err == "nil" {
 		// 1 row
 		log.Print("Found username")
 		var passwordindatabase string
-		config.DB.QueryRow("SELECT password FROM users WHERE username=$1;", &user.Username).Scan(&passwordindatabase)
-		if passwordindatabase == user.Password {
+		config.DB.QueryRow("SELECT password FROM users WHERE username=$1;", &loginjson.Username).Scan(&passwordindatabase)
+		if passwordindatabase == loginjson.Password {
 			log.Print("username and password match!")
 			session.Values["authenticated"] = true
-			session.Values["username"] = &user.Username
+			session.Values["username"] = &loginjson.Username
 			config.KeyStore().Save(r, w, session)
 		} else {
 			log.Print("username and password don't match!")
