@@ -8,8 +8,8 @@ import (
 )
 
 func DeleteAllDungeonTypes(w http.ResponseWriter, r *http.Request) {
-	db := config.Sql_connect()
 	log.Print("inside DeleteAllDungeonClasses() in dungeon")
-	db.Query("TRUNCATE dungeon_classes")
-	db.Query("TRUNCATE dungeon_races")
+	config.DB.Query("DROP TABLE dungeon_classes")
+	config.DB.Query("DROP TABLE dungeon_races")
+	config.DB.Query("DROP TABLE dungeon_backgrounds")
 }

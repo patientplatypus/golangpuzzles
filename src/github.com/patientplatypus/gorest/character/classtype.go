@@ -18,6 +18,8 @@ func ClassType(w http.ResponseWriter, r *http.Request) {
 	log.Print("Value of store: ", store)
 	session, _ := store.Get(r, "cookie-name")
 	log.Print("inside Class 2")
+	log.Print("value of session: ", session)
+	log.Print("value of session.Values['authenticated']", session.Values["authenticated"])
 	if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
 		log.Print("Verboten!")
 		http.Error(w, "Forbidden", http.StatusForbidden)

@@ -6,6 +6,10 @@ import (
 	"reflect"
 )
 
+var (
+	DB *sql.DB
+)
+
 func Sql_connect() (db *sql.DB) {
 
 	sqlConfig := reflect.ValueOf(Sql_config())

@@ -9,12 +9,11 @@ import (
 
 func (user *User) Login(w http.ResponseWriter, r *http.Request) {
 	session, _ := config.KeyStore().Get(r, "cookie-name")
-	db := config.Sql_connect()
-	if err := db.QueryRow("SELECT username FROM users WHERE username=$1;", &user.Username).Scan(&user.Username); err == nil {
+	if err := config.DB.QueryRow("SELECT username FROM users WHERE username=$1;", &user.Username).Scan(&user.Username); err == nil {
 		// 1 row
 		log.Print("Found username")
 		var passwordindatabase string
-		db.QueryRow("SELECT password FROM users WHERE username=$1;", &user.Username).Scan(&passwordindatabase)
+		config.DB.QueryRow("SELECT password FROM users WHERE username=$1;", &user.Username).Scan(&passwordindatabase)
 		if passwordindatabase == user.Password {
 			log.Print("username and password match!")
 			session.Values["authenticated"] = true

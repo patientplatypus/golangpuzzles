@@ -32,5 +32,7 @@ func KeyStore() (store Store) {
 	log.Print("inside KeyStore")
 	key := []byte("H(@>gCYB}xU@f{Q?yV{9F2PM~O1vy=")
 	store = sessions.NewCookieStore(key)
+	log.Print("Value of store is : ", store)
+	// log.Print("Value of store.Values['username']: ", store.Get(r, "cookie-name"))
 	return store
 }

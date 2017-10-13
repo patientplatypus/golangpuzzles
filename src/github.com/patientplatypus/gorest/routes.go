@@ -9,6 +9,8 @@ import (
 
 	"github.com/patientplatypus/gorest/character"
 
+	"github.com/patientplatypus/gorest/createcharacter"
+
 	"github.com/gorilla/mux"
 )
 
@@ -85,27 +87,27 @@ var routes = Routes{
 		users.QueryAllUsers,
 	},
 	Route{
-		"ClassType",
-		"GET",
-		"/populate/classtype",
-		dungeon.ClassType,
-	},
-	Route{
-		"RaceType",
-		"GET",
-		"/populate/racetype",
-		dungeon.RaceType,
-	},
-	// Route{
-	// 	"BackgroundType",
-	// 	"GET",
-	// 	"/populate/backgroundtype",
-	// 	dungeon.BackgroundType,
-	// },
-	Route{
 		"DeleteAllDungeonTypes",
 		"GET",
 		"/populate/deletealldungeontypes",
 		dungeon.DeleteAllDungeonTypes,
+	},
+	Route{
+		"PopulateDB",
+		"GET",
+		"/populate/populatedb",
+		dungeon.PopulateDB,
+	},
+	Route{
+		"NewCharacter",
+		"Post",
+		"/createcharacter/newcharacter",
+		createcharacter.NewCharacter,
+	},
+	Route{
+		"NewCharacter",
+		"GET",
+		"/createcharacter/deletealluserscharacters",
+		createcharacter.DeleteAllUsersCharacters,
 	},
 }

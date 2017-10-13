@@ -14,12 +14,25 @@ type User struct {
 
 func DeleteAllUsers(w http.ResponseWriter, r *http.Request) {
 	//super duper dangerous - Axe in production!
+	// log.Print("Waiting for create table")
+	// finished := make(chan bool)
+	// go Create_Table(finished, "classes")
+	// <-finished
+	// log.Print("Continuing with the rest of the program")
+
 	DeleteAll()
 }
 
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
+
+	log.Print("Waiting for create table")
+	finished := make(chan bool)
+	go Create_Table(finished, "classes")
+	<-finished
+	log.Print("Continuing with the rest of the program")
+
 	if username != "" && password != "" {
 		user := User{Username: username, Password: password}
 		user.Create()

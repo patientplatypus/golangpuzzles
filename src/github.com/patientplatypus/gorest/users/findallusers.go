@@ -8,8 +8,7 @@ import (
 )
 
 func QueryAll() {
-	db := config.Sql_connect()
-	rows, err := db.Query("SELECT username, id FROM users")
+	rows, err := config.DB.Query("SELECT username, id FROM users")
 	defer rows.Close()
 	log.Print("Here are the usernames in the database:")
 	for rows.Next() {

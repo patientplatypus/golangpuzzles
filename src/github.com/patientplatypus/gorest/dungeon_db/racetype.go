@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"net/http"
 	"sync"
 
 	"github.com/patientplatypus/gorest/config"
@@ -30,12 +29,15 @@ type RacesType struct {
 type SubracesType struct {
 	SubraceName          string           `json:"subracename"`
 	AbilityScoreIncrease AbilityScoreType `json:"abilityscoreincrease"`
-	Subracialtraits      []RacialTraits   `json:"subracialtraits"`
+	SubracialTraits      []RacialTraits   `json:"subracialtraits"`
 }
 
 type RacialTraits struct {
-	TraitName        string `json:"traitname"`
-	TraitDescription string `json:"traitdescription"`
+	TraitName        string   `json:"traitname"`
+	TraitDescription string   `json:"traitdescription"`
+	HasProficiency   []string `json:"hasproficiency"`
+	HasResistance    []string `json:"hasresistance"`
+	HasAdvantage     []string `json:"hasadvantage"`
 }
 
 type AbilityScoreType struct {
@@ -71,11 +73,15 @@ func DwarfSet(wg *sync.WaitGroup) {
 				{TraitName: "Darkvision",
 					TraitDescription: "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light"},
 				{TraitName: "Tool Proficiency",
-					TraitDescription: "Proficiency: smith's tools, brewer's supplies, mason's tools"},
+					TraitDescription: "Proficiency: smith's tools, brewer's supplies, mason's tools",
+					HasProficiency:   []string{"smith's tools", "brewer's supplies", "mason's tools"}},
 				{TraitName: "Dwarven Resilience",
-					TraitDescription: "You have advantage on saving throws against poison, and you have resistance against poison damage"},
+					TraitDescription: "You have advantage on saving throws against poison, and you have resistance against poison damage",
+					HasAdvantage:     []string{"poison"},
+					HasResistance:    []string{"poison"}},
 				{TraitName: "Dwarven Combat Training",
-					TraitDescription: "Proficiency: battleaxe, handaxe, light hammer, warhammer"},
+					TraitDescription: "Proficiency: battleaxe, handaxe, light hammer, warhammer",
+					HasProficiency:   []string{"battleaxe", "handaxe", "light hammer", "warhammer"}},
 				{TraitName: "Stonecunning",
 					TraitDescription: "Whenever you make an Intelligence (History) check related to the origin of stonework, you are considered proficient in the History skill and add double your proficiency bonus to the check, instead of your normal proficiency bonus."},
 			},
@@ -86,7 +92,7 @@ func DwarfSet(wg *sync.WaitGroup) {
 					Ability:  []string{"Wisdom"},
 					Increase: []int{1},
 				},
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Dwarven Toughness",
 						TraitDescription: "hit point maximum 1 increases by 1 every level"},
 				},
@@ -96,19 +102,20 @@ func DwarfSet(wg *sync.WaitGroup) {
 					Ability:  []string{"Strength"},
 					Increase: []int{2},
 				},
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Dwarven Armor Training",
-						TraitDescription: "Proficiency: light armor, medium armor"},
+						TraitDescription: "Proficiency: light armor, medium armor",
+						HasProficiency:   []string{"light armor", "medium armor"}},
 				},
 			},
 		},
 	}
-	data, err := json.Marshal(dwarf)
+	dataraces, err := json.Marshal(dwarf)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckRace("dwarf", data, wg)
+	CheckRace("dwarf", dataraces, wg)
 }
 
 func ElfSet(wg *sync.WaitGroup) {
@@ -133,9 +140,11 @@ func ElfSet(wg *sync.WaitGroup) {
 				{TraitName: "Darkvision",
 					TraitDescription: "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light"},
 				{TraitName: "Keen Senses",
-					TraitDescription: "Proficiency: Perception"},
+					TraitDescription: "Proficiency: Perception",
+					HasProficiency:   []string{"Perception"}},
 				{TraitName: "Fey Ancestry",
-					TraitDescription: "You have advantage on saving throws against being charmed, and magic can't put you to sleep"},
+					TraitDescription: "You have advantage on saving throws against being charmed, and magic can't put you to sleep",
+					HasAdvantage:     []string{"charmed"}},
 				{TraitName: "Trance",
 					TraitDescription: "Resting only takes 4 hours."},
 			},
@@ -146,9 +155,10 @@ func ElfSet(wg *sync.WaitGroup) {
 					Ability:  []string{"Intelligence"},
 					Increase: []int{1},
 				},
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Elf Weapon Training",
-						TraitDescription: "Proficiency: longsword, shortsword, shortbow, longbow"},
+						TraitDescription: "Proficiency: longsword, shortsword, shortbow, longbow",
+						HasProficiency:   []string{"longsword", "shortsword", "shortbow", "longbow"}},
 					{TraitName: "Cantrip",
 						TraitDescription: "You know one cantrip of your choice from the wizard spell list. Intelligence is your spellcasting ability for it."},
 					{TraitName: "Extra Language", TraitDescription: "You can speak, read, and write one extra language of your choice."},
@@ -159,9 +169,10 @@ func ElfSet(wg *sync.WaitGroup) {
 					Ability:  []string{"Wisdom"},
 					Increase: []int{1},
 				},
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Elf Weapon Training",
-						TraitDescription: "Proficiency: longsword, shortsword, shortbow, longbow"},
+						TraitDescription: "Proficiency: longsword, shortsword, shortbow, longbow",
+						HasProficiency:   []string{"longsword", "shortsword", "shortbow", "longbow"}},
 					{TraitName: "Fleet of Foot",
 						TraitDescription: "Speed: 35"},
 					{TraitName: "Mask of the Wild",
@@ -173,7 +184,7 @@ func ElfSet(wg *sync.WaitGroup) {
 					Ability:  []string{"Charisma"},
 					Increase: []int{1},
 				},
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Superior Darkvision",
 						TraitDescription: "Your darkvision has a range of 120 feet"},
 					{TraitName: "Sunlight Sensitivity",
@@ -181,17 +192,18 @@ func ElfSet(wg *sync.WaitGroup) {
 					{TraitName: "Drow Magic",
 						TraitDescription: "You know the dancing lights cantrip. When you reach 3rd level, you can cast the faerie fire spell once with this trait and regain the ability to do so when you finish a long rest. When you reach fifth level, you can cast the darkness spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spell casting ability for these spells."},
 					{TraitName: "Drow Weapon Training",
-						TraitDescription: "Proficiency: rapiers, shortswords, hand crossbows"},
+						TraitDescription: "Proficiency: rapiers, shortswords, hand crossbows",
+						HasProficiency:   []string{"rapiers", "shortswords", "hand crossbows"}},
 				},
 			},
 		},
 	}
-	data, err := json.Marshal(elf)
+	dataraces, err := json.Marshal(elf)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckRace("elf", data, wg)
+	CheckRace("elf", dataraces, wg)
 }
 
 func HalflingSet(wg *sync.WaitGroup) {
@@ -216,7 +228,8 @@ func HalflingSet(wg *sync.WaitGroup) {
 				{TraitName: "Lucky",
 					TraitDescription: "When you roll a 1 on the d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new roll"},
 				{TraitName: "Brave",
-					TraitDescription: "You have advantage on saving throws against being frightened"},
+					TraitDescription: "You have advantage on saving throws against being frightened",
+					HasAdvantage:     []string{"frightened"}},
 				{TraitName: "Halfling Nimbleness",
 					TraitDescription: "You can move through the space of any creature that is of a size larger than yours"},
 			},
@@ -227,7 +240,7 @@ func HalflingSet(wg *sync.WaitGroup) {
 					Ability:  []string{"Charisma"},
 					Increase: []int{1},
 				},
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Naturally Stealthy",
 						TraitDescription: "You can attempt to hide even when you are obscured only by a creature that is at least one size larger than you."},
 				},
@@ -237,19 +250,21 @@ func HalflingSet(wg *sync.WaitGroup) {
 					Ability:  []string{"Constitution"},
 					Increase: []int{1},
 				},
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Stout Resilience",
-						TraitDescription: "You have advantage on saving throws agains poison, and you have resistance against poison damage"},
+						TraitDescription: "You have advantage on saving throws agains poison, and you have resistance against poison damage",
+						HasAdvantage:     []string{"Poision"},
+						HasResistance:    []string{"Poison"}},
 				},
 			},
 		},
 	}
-	data, err := json.Marshal(halfling)
+	dataraces, err := json.Marshal(halfling)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckRace("halfling", data, wg)
+	CheckRace("halfling", dataraces, wg)
 }
 
 func HumanSet(wg *sync.WaitGroup) {
@@ -272,12 +287,12 @@ func HumanSet(wg *sync.WaitGroup) {
 			RaceName: "Human",
 		},
 	}
-	data, err := json.Marshal(human)
+	dataraces, err := json.Marshal(human)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckRace("human", data, wg)
+	CheckRace("human", dataraces, wg)
 }
 
 func DragonbornSet(wg *sync.WaitGroup) {
@@ -305,113 +320,103 @@ func DragonbornSet(wg *sync.WaitGroup) {
 		},
 		SubRace: []SubracesType{
 			{SubraceName: "Black",
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Breath Weapon",
 						TraitDescription: "5 by 30 ft line (Dex save)"},
 					{TraitName: "Damage Type",
-						TraitDescription: "Acid"},
-					{TraitName: "Damage Resistance",
-						TraitDescription: "Acid"},
+						TraitDescription: "Acid",
+						HasResistance:    []string{"Acid"}},
 				},
 			},
 			{SubraceName: "Blue",
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Breath Weapon",
 						TraitDescription: "5 by 30 ft line (Dex save)"},
 					{TraitName: "Damage Type",
-						TraitDescription: "Lightning"},
-					{TraitName: "Damage Resistance",
-						TraitDescription: "Lightning"},
+						TraitDescription: "Lightning",
+						HasResistance:    []string{"Lightning"}},
 				},
 			},
 			{SubraceName: "Brass",
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Breath Weapon",
 						TraitDescription: "5 by 30 ft line (Dex save)"},
 					{TraitName: "Damage Type",
-						TraitDescription: "Fire"},
-					{TraitName: "Damage Resistance",
-						TraitDescription: "Fire"},
+						TraitDescription: "Fire",
+						HasResistance:    []string{"Fire"}},
 				},
 			},
 			{SubraceName: "Bronze",
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Breath Weapon",
 						TraitDescription: "5 by 30 ft line (Dex save)"},
 					{TraitName: "Damage Type",
-						TraitDescription: "Lightening"},
-					{TraitName: "Damage Resistance",
-						TraitDescription: "Lightning"},
+						TraitDescription: "Lightening",
+						HasResistance:    []string{"Lightening"}},
 				},
 			},
 			{SubraceName: "Copper",
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Breath Weapon",
 						TraitDescription: "5 by 30 ft line (Dex save)"},
 					{TraitName: "Damage Type",
-						TraitDescription: "Acid"},
-					{TraitName: "Damage Resistance",
-						TraitDescription: "Acid"},
+						TraitDescription: "Acid",
+						HasResistance:    []string{"Acid"}},
 				},
 			},
 			{SubraceName: "Gold",
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Breath Weapon",
 						TraitDescription: "15 ft cone (Dex Save)"},
 					{TraitName: "Damage Type",
-						TraitDescription: "Fire"},
-					{TraitName: "Damage Resistance",
-						TraitDescription: "Fire"},
+						TraitDescription: "Fire",
+						HasResistance:    []string{"Fire"}},
 				},
 			},
 			{SubraceName: "Green",
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Breath Weapon",
 						TraitDescription: "15 ft cone (Con Save)"},
 					{TraitName: "Damage Type",
-						TraitDescription: "Poison"},
-					{TraitName: "Damage Resistance",
-						TraitDescription: "Poison"},
+						TraitDescription: "Poison",
+						HasResistance:    []string{"Poison"}},
 				},
 			},
 			{SubraceName: "Red",
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Breath Weapon",
 						TraitDescription: "15 ft cone (Dex Save)"},
 					{TraitName: "Damage Type",
-						TraitDescription: "Fire"},
-					{TraitName: "Damage Resistance",
-						TraitDescription: "Fire"},
+						TraitDescription: "Fire",
+						HasResistance:    []string{"Fire"}},
 				},
 			},
 			{SubraceName: "Silver",
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Breath Weapon",
 						TraitDescription: "15 ft cone (Con Save)"},
 					{TraitName: "Damage Type",
-						TraitDescription: "Cold"},
-					{TraitName: "Damage Resistance",
-						TraitDescription: "Cold"},
+						TraitDescription: "Cold",
+						HasResistance:    []string{"Cold"}},
 				},
 			},
 			{SubraceName: "White",
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Breath Weapon",
 						TraitDescription: "15 ft cone (Con Save)"},
 					{TraitName: "Damage Type",
-						TraitDescription: "Cold"},
-					{TraitName: "Damage Resistance",
-						TraitDescription: "Cold"},
+						TraitDescription: "Cold",
+						HasResistance:    []string{"Cold"}},
 				},
 			},
 		},
 	}
-	data, err := json.Marshal(dragonborn)
+	dataraces, err := json.Marshal(dragonborn)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckRace("dragonborn", data, wg)
+	CheckRace("dragonborn", dataraces, wg)
 }
 
 func GnomeSet(wg *sync.WaitGroup) {
@@ -436,7 +441,8 @@ func GnomeSet(wg *sync.WaitGroup) {
 				{TraitName: "Darkvision",
 					TraitDescription: "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim ligh"},
 				{TraitName: "Gnome Cunning",
-					TraitDescription: "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic."},
+					TraitDescription: "You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.",
+					HasAdvantage:     []string{"Magic"}},
 			},
 		},
 		SubRace: []SubracesType{
@@ -445,7 +451,7 @@ func GnomeSet(wg *sync.WaitGroup) {
 					Ability:  []string{"Dexterity"},
 					Increase: []int{1},
 				},
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Natural Illusionist",
 						TraitDescription: "You know the natural illusionist cantrip. Intelligence is your spellcasting ability for it."},
 					{TraitName: "Speak with Small Beasts",
@@ -457,7 +463,7 @@ func GnomeSet(wg *sync.WaitGroup) {
 					Ability:  []string{"Constitution"},
 					Increase: []int{1},
 				},
-				Subracialtraits: []RacialTraits{
+				SubracialTraits: []RacialTraits{
 					{TraitName: "Artificer's Lore",
 						TraitDescription: "Whenever you make an Intelligence (History) check related to magic items, alchemical objects, or technological devices, you can add twice your proficiency bonus, instead of any proficiency bonus you normally apply"},
 					{TraitName: "Tinker",
@@ -466,63 +472,168 @@ func GnomeSet(wg *sync.WaitGroup) {
 			},
 		},
 	}
-	data, err := json.Marshal(gnome)
+	dataraces, err := json.Marshal(gnome)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckRace("gnome", data, wg)
+	CheckRace("gnome", dataraces, wg)
 }
 
-func CheckRace(racename string, data []byte, wg *sync.WaitGroup) {
-	db := config.Sql_connect()
-	log.Print("inside CheckRace() and the value of race is ", racename)
-	if err := db.QueryRow("SELECT racename FROM dungeon_races WHERE racename=$1", racename).Scan(&racename); err == nil {
+func HalfelfSet(wg *sync.WaitGroup) {
+	halfelf := RaceTypes{
+		Name: "Half Elf",
+		AbilityScoreIncrease: AbilityScoreType{
+			Ability:  []string{"Charisma", "Other", "Other"},
+			Increase: []int{2, 1, 1},
+		},
+		Age:       []int{20, 180},
+		Alignment: []string{"chaotic"},
+		Size: SizeType{
+			Height: "5-6 feet",
+			Weight: "150 pounds",
+			Size:   "Medium",
+		},
+		Speed:     30,
+		Languages: []string{"Common", "Elvish", "1Extra"},
+		Race: RacesType{
+			RaceName: "Half Elf",
+			RaceTraits: []RacialTraits{
+				{TraitName: "Fey Ancestry",
+					TraitDescription: "You have advantage on saving throws against being charmed, and magic can't put you to sleep.",
+					HasAdvantage:     []string{"Charmed"}},
+				{TraitName: "Skill Versatility",
+					TraitDescription: "Proficiency: 2 skills of your choice.",
+					HasProficiency:   []string{"2Extra"}},
+				{TraitName: "Darkvision",
+					TraitDescription: "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light"},
+			},
+		},
+	}
+	dataraces, err := json.Marshal(halfelf)
+	if err != nil {
+		fmt.Println("Oh no! There was an error:", err)
+		return
+	}
+	CheckRace("halfelf", dataraces, wg)
+}
+
+func HalforcSet(wg *sync.WaitGroup) {
+	halforc := RaceTypes{
+		Name: "Half Orc",
+		AbilityScoreIncrease: AbilityScoreType{
+			Ability:  []string{"Constitution", "Strength"},
+			Increase: []int{1, 2},
+		},
+		Age:       []int{14, 75},
+		Alignment: []string{"chaotic", "evil"},
+		Size: SizeType{
+			Height: "5-6 feet",
+			Weight: "200 pounds",
+			Size:   "Medium",
+		},
+		Speed:     30,
+		Languages: []string{"Common", "Orc"},
+		Race: RacesType{
+			RaceName: "Half Orc",
+			RaceTraits: []RacialTraits{
+				{TraitName: "Menacing",
+					TraitDescription: "Proficiency: Intimidation"},
+				{TraitName: "Relentless Endurance",
+					TraitDescription: "When you are reduced to 0 hit points but not killed outright, you can drop to 1 hit point instead. You can't use this feature again until after you have finished a long rest."},
+				{TraitName: "Savage Attacks",
+					TraitDescription: "When you score a critical hit with a melee weapon attack, you can roll one of the weapon's damage dice one additional time and add it to the extra damage of the critical hit."},
+				{TraitName: "Darkvision",
+					TraitDescription: "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light"},
+			},
+		},
+	}
+	dataraces, err := json.Marshal(halforc)
+	if err != nil {
+		fmt.Println("Oh no! There was an error:", err)
+		return
+	}
+	CheckRace("halforc", dataraces, wg)
+}
+
+func TieflingSet(wg *sync.WaitGroup) {
+	tiefling := RaceTypes{
+		Name: "Tiefling",
+		AbilityScoreIncrease: AbilityScoreType{
+			Ability:  []string{"Intelligence", "Charisma"},
+			Increase: []int{1, 2},
+		},
+		Age:       []int{20, 110},
+		Alignment: []string{"chaotic", "evil"},
+		Size: SizeType{
+			Height: "5-6 feet",
+			Weight: "150 pounds",
+			Size:   "Medium",
+		},
+		Speed:     30,
+		Languages: []string{"Common", "Infernal"},
+		Race: RacesType{
+			RaceName: "Tiefling",
+			RaceTraits: []RacialTraits{
+				{TraitName: "Hellish Resistance",
+					TraitDescription: "You have resistance to fire damage.",
+					HasResistance:    []string{"Fire"}},
+				{TraitName: "Infernal Legacy",
+					TraitDescription: "You know the thaumaturgy cantrip. When you reach third level, you can cast the hellish rebuke spell as a 2nd level spell once with this trait and regain the ability to do so when you finish a long rest. When you reach 5th level you can cast the darkness spell once with this trait and regain the ability to do so when you finish a long rest. Charisma is your spellcasting ability for this spell."},
+				{TraitName: "Darkvision",
+					TraitDescription: "You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light"},
+			},
+		},
+	}
+	dataraces, err := json.Marshal(tiefling)
+	if err != nil {
+		fmt.Println("Oh no! There was an error:", err)
+		return
+	}
+	CheckRace("tiefling", dataraces, wg)
+}
+
+func CheckRace(racesname string, dataraces []byte, wg *sync.WaitGroup) {
+	log.Print("inside CheckRace() and the value of race is ", racesname)
+	if err := config.DB.QueryRow("SELECT racesname FROM dungeon_races WHERE racesname=$1", racesname).Scan(&racesname); err == nil {
 		log.Print("The chosen race already exists in dungeon_races!")
-		log.Print("Value of all entries in database is: ")
-		rows, error := db.Query("Select racename, data from dungeon_races")
+		log.Print("Value of all entries in dataracesbase is: ")
+		rows, error := config.DB.Query("Select racesname, dataraces from dungeon_races")
 		defer rows.Close()
 		for rows.Next() {
-			var racename string
-			var data []byte
-			error = rows.Scan(&racename, &data)
+			var racesname string
+			var dataraces []byte
+			error = rows.Scan(&racesname, &dataraces)
 			if error != nil {
 				panic(error)
 			}
 			var obj RaceTypes
-			if err := json.Unmarshal(data, &obj); err != nil {
+			if err := json.Unmarshal(dataraces, &obj); err != nil {
 				panic(err)
 			}
-			log.Print("racename: ", racename, " obj ", obj)
+			log.Print("racename: ", racesname, " obj ", obj)
 		}
 		wg.Done()
 	} else if err.Error() == "sql: no rows in result set" {
 		log.Print("value of err: ", err)
 		log.Print("no rows found of class, inserting into db")
-		db.QueryRow("INSERT INTO dungeon_races VALUES ($1, $2);", racename, data)
+		config.DB.QueryRow("INSERT INTO dungeon_races VALUES ($1, $2);", racesname, dataraces)
 		wg.Done()
 	} else {
 		log.Print("There must have been some other error: ", err)
+		wg.Done()
 	}
 }
 
-func Create_Table(finished chan bool) {
-	log.Print("Create table started")
-	db := config.Sql_connect()
-	db.Query("CREATE TABLE IF NOT EXISTS dungeon_races(racename text not null, data json);")
-	log.Print("Create table finished")
-	finished <- true
-}
-
-func RaceType(w http.ResponseWriter, r *http.Request) {
+func RaceType() {
 	log.Print("inside racetype of dungeon")
 	var wg sync.WaitGroup
 
-	wg.Add(6)
+	wg.Add(9)
 
 	log.Print("Waiting for create table")
 	finished := make(chan bool)
-	go Create_Table(finished)
+	go Create_Table(finished, "races")
 	<-finished
 	log.Print("Continuing with the rest of the program")
 
@@ -538,7 +649,13 @@ func RaceType(w http.ResponseWriter, r *http.Request) {
 	go DragonbornSet(&wg)
 	//6
 	go GnomeSet(&wg)
+	//7
+	go HalfelfSet(&wg)
+	//8
+	go HalforcSet(&wg)
+	//9
+	go TieflingSet(&wg)
 
 	wg.Wait()
-	log.Print("Done")
+	log.Print("Race Done")
 }

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
-	"net/http"
 	"sync"
 
 	"github.com/patientplatypus/gorest/config"
@@ -29,10 +28,12 @@ type EquipmentChoices struct {
 	ChoiceA []string `json:"choicea"`
 	ChoiceB []string `json:"choiceb"`
 	ChoiceC []string `json:"choicec"`
+	ChoiceD []string `json:"choiced"`
 }
 
 //1
 func BarbarianSet(wg *sync.WaitGroup) {
+	log.Print("Now inside BarbarianSet")
 	barbarian := ClassFeatures{
 		BaseHitPoints: 12,
 		Proficiencies: ProficiencyTypes{
@@ -44,25 +45,22 @@ func BarbarianSet(wg *sync.WaitGroup) {
 			BaseSkillNumber: 2},
 		Equipment: []EquipmentChoices{
 			{ChoiceA: []string{"greataxe"},
-				ChoiceB: []string{"any martial melee weapon"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"any martial melee weapon"}},
 			{ChoiceA: []string{"two handaxes"},
-				ChoiceB: []string{"any simple weapon"},
-				ChoiceC: []string{""}},
-			{ChoiceA: []string{"an explorer's pack", "four javelins"},
-				ChoiceB: []string{""},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"any simple weapon"}},
+			{ChoiceA: []string{"an explorer's pack", "four javelins"}},
 		}}
-	data, err := json.Marshal(barbarian)
+	dataclasses, err := json.Marshal(barbarian)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckClass("barbarian", data, wg)
+	CheckClass("barbarian", dataclasses, wg)
 }
 
 //2
 func BardSet(wg *sync.WaitGroup) {
+	log.Print("Now inside BardSet")
 	bard := ClassFeatures{
 		BaseHitPoints: 8,
 		Proficiencies: ProficiencyTypes{
@@ -77,25 +75,22 @@ func BardSet(wg *sync.WaitGroup) {
 				ChoiceB: []string{"longsword"},
 				ChoiceC: []string{"any simple weapon"}},
 			{ChoiceA: []string{"diplomat's pack"},
-				ChoiceB: []string{"entertainer's pack"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"entertainer's pack"}},
 			{ChoiceA: []string{"lute"},
-				ChoiceB: []string{"any musical instrument"},
-				ChoiceC: []string{""}},
-			{ChoiceA: []string{"leather armor", "dagger"},
-				ChoiceB: []string{""},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"any musical instrument"}},
+			{ChoiceA: []string{"leather armor", "dagger"}},
 		}}
-	data, err := json.Marshal(bard)
+	dataclasses, err := json.Marshal(bard)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckClass("bard", data, wg)
+	CheckClass("bard", dataclasses, wg)
 }
 
 //3
 func ClericSet(wg *sync.WaitGroup) {
+	log.Print("Now inside ClericSet")
 	cleric := ClassFeatures{
 		BaseHitPoints: 8,
 		Proficiencies: ProficiencyTypes{
@@ -107,31 +102,26 @@ func ClericSet(wg *sync.WaitGroup) {
 			BaseSkillNumber: 2},
 		Equipment: []EquipmentChoices{
 			{ChoiceA: []string{"mace"},
-				ChoiceB: []string{"warhammer (if proficient)"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"warhammer (if proficient)"}},
 			{ChoiceA: []string{"scale male"},
 				ChoiceB: []string{"leather armor"},
 				ChoiceC: []string{"chain male (if proficient)"}},
 			{ChoiceA: []string{"light crossbow", "20 bolts"},
-				ChoiceB: []string{"any simple weapon"},
-				ChoiceC: []string{""}},
-			{ChoiceA: []string{"priest's pack", "explorer's pack"},
-				ChoiceB: []string{""},
-				ChoiceC: []string{""}},
-			{ChoiceA: []string{"shield", "holy symbol"},
-				ChoiceB: []string{""},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"any simple weapon"}},
+			{ChoiceA: []string{"priest's pack", "explorer's pack"}},
+			{ChoiceA: []string{"shield", "holy symbol"}},
 		}}
-	data, err := json.Marshal(cleric)
+	dataclasses, err := json.Marshal(cleric)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckClass("cleric", data, wg)
+	CheckClass("cleric", dataclasses, wg)
 }
 
 //4
 func DruidSet(wg *sync.WaitGroup) {
+	log.Print("Now inside DruidSet")
 	druid := ClassFeatures{
 		BaseHitPoints: 8,
 		Proficiencies: ProficiencyTypes{
@@ -143,25 +133,22 @@ func DruidSet(wg *sync.WaitGroup) {
 			BaseSkillNumber: 2},
 		Equipment: []EquipmentChoices{
 			{ChoiceA: []string{"wooden shield"},
-				ChoiceB: []string{"any simple weapon"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"any simple weapon"}},
 			{ChoiceA: []string{"scimitar"},
-				ChoiceB: []string{"any simple melee weapon"},
-				ChoiceC: []string{""}},
-			{ChoiceA: []string{"leather armor", "explorer's pack", "druidic focus"},
-				ChoiceB: []string{""},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"any simple melee weapon"}},
+			{ChoiceA: []string{"leather armor", "explorer's pack", "druidic focus"}},
 		}}
-	data, err := json.Marshal(druid)
+	dataclasses, err := json.Marshal(druid)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckClass("druid", data, wg)
+	CheckClass("druid", dataclasses, wg)
 }
 
 //5
 func FighterSet(wg *sync.WaitGroup) {
+	log.Print("Now inside FighterSet")
 	fighter := ClassFeatures{
 		BaseHitPoints: 10,
 		Proficiencies: ProficiencyTypes{
@@ -173,28 +160,25 @@ func FighterSet(wg *sync.WaitGroup) {
 			BaseSkillNumber: 2},
 		Equipment: []EquipmentChoices{
 			{ChoiceA: []string{"chain mail"},
-				ChoiceB: []string{"leather armor", "longbow", "20 arrows"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"leather armor", "longbow", "20 arrows"}},
 			{ChoiceA: []string{"any martial weapon", "shield"},
-				ChoiceB: []string{"two martial weapons"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"two martial weapons"}},
 			{ChoiceA: []string{"light crossbow", "20 bolts"},
-				ChoiceB: []string{"two handaxes"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"two handaxes"}},
 			{ChoiceA: []string{"dungeoneer's pack"},
-				ChoiceB: []string{"explorer's pack"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"explorer's pack"}},
 		}}
-	data, err := json.Marshal(fighter)
+	dataclasses, err := json.Marshal(fighter)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckClass("fighter", data, wg)
+	CheckClass("fighter", dataclasses, wg)
 }
 
 //6
 func MonkSet(wg *sync.WaitGroup) {
+	log.Print("Now inside MonkSet")
 	monk := ClassFeatures{
 		BaseHitPoints: 10,
 		Proficiencies: ProficiencyTypes{
@@ -206,25 +190,22 @@ func MonkSet(wg *sync.WaitGroup) {
 			BaseSkillNumber: 2},
 		Equipment: []EquipmentChoices{
 			{ChoiceA: []string{"shortsword"},
-				ChoiceB: []string{"any simple weapon"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"any simple weapon"}},
 			{ChoiceA: []string{"dungeoneer's pack"},
-				ChoiceB: []string{"explorer's pack"},
-				ChoiceC: []string{""}},
-			{ChoiceA: []string{"10 darts"},
-				ChoiceB: []string{""},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"explorer's pack"}},
+			{ChoiceA: []string{"10 darts"}},
 		}}
-	data, err := json.Marshal(monk)
+	dataclasses, err := json.Marshal(monk)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckClass("monk", data, wg)
+	CheckClass("monk", dataclasses, wg)
 }
 
 //7
 func PaladinSet(wg *sync.WaitGroup) {
+	log.Print("Now inside PaladinSet")
 	paladin := ClassFeatures{
 		BaseHitPoints: 10,
 		Proficiencies: ProficiencyTypes{
@@ -236,28 +217,24 @@ func PaladinSet(wg *sync.WaitGroup) {
 			BaseSkillNumber: 2},
 		Equipment: []EquipmentChoices{
 			{ChoiceA: []string{"martial weapon", "shield"},
-				ChoiceB: []string{"two martial weapons"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"two martial weapons"}},
 			{ChoiceA: []string{"five javelins"},
-				ChoiceB: []string{"any simple melee weapon"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"any simple melee weapon"}},
 			{ChoiceA: []string{"priest's pack"},
-				ChoiceB: []string{"explorer's pack"},
-				ChoiceC: []string{""}},
-			{ChoiceA: []string{"chain mail", "holy symbol"},
-				ChoiceB: []string{""},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"explorer's pack"}},
+			{ChoiceA: []string{"chain mail", "holy symbol"}},
 		}}
-	data, err := json.Marshal(paladin)
+	dataclasses, err := json.Marshal(paladin)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckClass("paladin", data, wg)
+	CheckClass("paladin", dataclasses, wg)
 }
 
 //8
 func RangerSet(wg *sync.WaitGroup) {
+	log.Print("Now inside RangerSet")
 	ranger := ClassFeatures{
 		BaseHitPoints: 10,
 		Proficiencies: ProficiencyTypes{
@@ -269,28 +246,24 @@ func RangerSet(wg *sync.WaitGroup) {
 			BaseSkillNumber: 3},
 		Equipment: []EquipmentChoices{
 			{ChoiceA: []string{"scale mail"},
-				ChoiceB: []string{"leather armor"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"leather armor"}},
 			{ChoiceA: []string{"two shortswords"},
-				ChoiceB: []string{"two simple melee weapon"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"two simple melee weapon"}},
 			{ChoiceA: []string{"dungeoneer's pack"},
-				ChoiceB: []string{"explorer's pack"},
-				ChoiceC: []string{""}},
-			{ChoiceA: []string{"longbow", "20 arrows"},
-				ChoiceB: []string{""},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"explorer's pack"}},
+			{ChoiceA: []string{"longbow", "20 arrows"}},
 		}}
-	data, err := json.Marshal(ranger)
+	dataclasses, err := json.Marshal(ranger)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckClass("ranger", data, wg)
+	CheckClass("ranger", dataclasses, wg)
 }
 
 //9
 func RogueSet(wg *sync.WaitGroup) {
+	log.Print("Now inside RogueSet")
 	rogue := ClassFeatures{
 		BaseHitPoints: 8,
 		Proficiencies: ProficiencyTypes{
@@ -302,28 +275,25 @@ func RogueSet(wg *sync.WaitGroup) {
 			BaseSkillNumber: 4},
 		Equipment: []EquipmentChoices{
 			{ChoiceA: []string{"rapier"},
-				ChoiceB: []string{"shortsword"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"shortsword"}},
 			{ChoiceA: []string{"shortbow", "20 arrows"},
-				ChoiceB: []string{"shortsword"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"shortsword"}},
 			{ChoiceA: []string{"burglar's pack"},
 				ChoiceB: []string{"dungeoneer's pack"},
 				ChoiceC: []string{"explorer's pack"}},
-			{ChoiceA: []string{"leather armor", "two daggers", "thieves' tools"},
-				ChoiceB: []string{""},
-				ChoiceC: []string{""}},
+			{ChoiceA: []string{"leather armor", "two daggers", "thieves' tools"}},
 		}}
-	data, err := json.Marshal(rogue)
+	dataclasses, err := json.Marshal(rogue)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckClass("rogue", data, wg)
+	CheckClass("rogue", dataclasses, wg)
 }
 
 //10
 func SorcererSet(wg *sync.WaitGroup) {
+	log.Print("Now inside SorcererSet")
 	sorcerer := ClassFeatures{
 		BaseHitPoints: 6,
 		Proficiencies: ProficiencyTypes{
@@ -335,28 +305,24 @@ func SorcererSet(wg *sync.WaitGroup) {
 			BaseSkillNumber: 2},
 		Equipment: []EquipmentChoices{
 			{ChoiceA: []string{"light crossbow", "20 bolts"},
-				ChoiceB: []string{"any simple weapon"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"any simple weapon"}},
 			{ChoiceA: []string{"component pouch"},
-				ChoiceB: []string{"arcane focus"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"arcane focus"}},
 			{ChoiceA: []string{"dungeoneer's pack"},
-				ChoiceB: []string{"explorer's pack"},
-				ChoiceC: []string{""}},
-			{ChoiceA: []string{"two daggers"},
-				ChoiceB: []string{""},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"explorer's pack"}},
+			{ChoiceA: []string{"two daggers"}},
 		}}
-	data, err := json.Marshal(sorcerer)
+	dataclasses, err := json.Marshal(sorcerer)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckClass("sorcerer", data, wg)
+	CheckClass("sorcerer", dataclasses, wg)
 }
 
 //11
 func WarlockSet(wg *sync.WaitGroup) {
+	log.Print("Now inside WarlockSet")
 	warlock := ClassFeatures{
 		BaseHitPoints: 8,
 		Proficiencies: ProficiencyTypes{
@@ -368,28 +334,24 @@ func WarlockSet(wg *sync.WaitGroup) {
 			BaseSkillNumber: 2},
 		Equipment: []EquipmentChoices{
 			{ChoiceA: []string{"light crossbow", "20 bolts"},
-				ChoiceB: []string{"any simple weapon"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"any simple weapon"}},
 			{ChoiceA: []string{"component pouch"},
-				ChoiceB: []string{"arcane focus"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"arcane focus"}},
 			{ChoiceA: []string{"scholar's pack"},
-				ChoiceB: []string{"dungeoneer's pack"},
-				ChoiceC: []string{""}},
-			{ChoiceA: []string{"leather armor", "any simple weapon", "two daggers"},
-				ChoiceB: []string{""},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"dungeoneer's pack"}},
+			{ChoiceA: []string{"leather armor", "any simple weapon", "two daggers"}},
 		}}
-	data, err := json.Marshal(warlock)
+	dataclasses, err := json.Marshal(warlock)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckClass("warlock", data, wg)
+	CheckClass("warlock", dataclasses, wg)
 }
 
 //12
 func WizardSet(wg *sync.WaitGroup) {
+	log.Print("Now inside WizardSet")
 	wizard := ClassFeatures{
 		BaseHitPoints: 6,
 		Proficiencies: ProficiencyTypes{
@@ -401,43 +363,37 @@ func WizardSet(wg *sync.WaitGroup) {
 			BaseSkillNumber: 2},
 		Equipment: []EquipmentChoices{
 			{ChoiceA: []string{"quarterstaff"},
-				ChoiceB: []string{"dagger"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"dagger"}},
 			{ChoiceA: []string{"component pouch"},
-				ChoiceB: []string{"arcane focus"},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"arcane focus"}},
 			{ChoiceA: []string{"scholar's pack"},
-				ChoiceB: []string{"explorer's pack"},
-				ChoiceC: []string{""}},
-			{ChoiceA: []string{"spellbook"},
-				ChoiceB: []string{""},
-				ChoiceC: []string{""}},
+				ChoiceB: []string{"explorer's pack"}},
+			{ChoiceA: []string{"spellbook"}},
 		}}
-	data, err := json.Marshal(wizard)
+	dataclasses, err := json.Marshal(wizard)
 	if err != nil {
 		fmt.Println("Oh no! There was an error:", err)
 		return
 	}
-	CheckClass("wizard", data, wg)
+	CheckClass("wizard", dataclasses, wg)
 }
 
-func CheckClass(classname string, data []byte, wg *sync.WaitGroup) {
-	db := config.Sql_connect()
-	if err := db.QueryRow("SELECT classname FROM dungeon_classes WHERE classname=$1", classname).Scan(&classname); err == nil {
+func CheckClass(classesname string, dataclasses []byte, wg *sync.WaitGroup) {
+	if err := config.DB.QueryRow("SELECT classesname FROM dungeon_classes WHERE classesname=$1", classesname).Scan(&classesname); err == nil {
 		//found name
 		log.Print("The chosen class already exists in dungeon_classes!")
-		log.Print("Value of all entries in database is: ")
-		rows, error := db.Query("Select classname, data from dungeon_classes")
+		log.Print("Value of all entries in dataclassesbase is: ")
+		rows, error := config.DB.Query("Select classesname, dataclasses from dungeon_classes")
 		defer rows.Close()
 		for rows.Next() {
-			var classname string
-			var data []byte
-			error = rows.Scan(&classname, &data)
+			var classesname string
+			var dataclasses []byte
+			error = rows.Scan(&classesname, &dataclasses)
 			if error != nil {
 				panic(error)
 			}
 			var obj ClassFeatures
-			if err := json.Unmarshal(data, &obj); err != nil {
+			if err := json.Unmarshal(dataclasses, &obj); err != nil {
 				panic(err)
 			}
 			// log.Print("classname: ", classname, " obj ", obj)
@@ -449,47 +405,63 @@ func CheckClass(classname string, data []byte, wg *sync.WaitGroup) {
 	} else if err.Error() == "sql: no rows in result set" {
 		log.Print("value of err: ", err)
 		log.Print("no rows found of class, inserting into db")
-		// log.Print("right before value of barbariandata")
-		// log.Print("value of barbariandata: ", barbariandata)
-		db.QueryRow("INSERT INTO dungeon_classes VALUES ($1, $2);", classname, data)
+		// log.Print("right before value of barbariandataclasses")
+		// log.Print("value of barbariandataclasses: ", barbariandataclasses)
+		config.DB.QueryRow("INSERT INTO dungeon_classes VALUES ($1, $2);", classesname, dataclasses)
 		wg.Done()
 	}
 }
 
-func ClassType(w http.ResponseWriter, r *http.Request) {
+func ClassType() {
 	log.Print("inside classtype of dungeon")
-	db := config.Sql_connect()
-	db.Query("CREATE TABLE IF NOT EXISTS dungeon_classes")
 
 	var wg sync.WaitGroup
 	wg.Add(12)
 
+	log.Print("Waiting for create table")
+	finished := make(chan bool)
+	go Create_Table(finished, "classes")
+	<-finished
+	log.Print("Continuing with the rest of the program")
+
 	//1
 	go BarbarianSet(&wg)
+	log.Print("Back inside ClassType after 1")
 	//2
 	go BardSet(&wg)
+	log.Print("Back inside ClassType after 2")
 	//3
 	go ClericSet(&wg)
+	log.Print("Back inside ClassType after 3")
 	//4
 	go DruidSet(&wg)
+	log.Print("Back inside ClassType after 4")
 	//5
 	go FighterSet(&wg)
+	log.Print("Back inside ClassType after 5")
 	//6
 	go MonkSet(&wg)
+	log.Print("Back inside ClassType after 6")
 	//7
 	go PaladinSet(&wg)
+	log.Print("Back inside ClassType after 7")
 	//8
 	go RangerSet(&wg)
+	log.Print("Back inside ClassType after 8")
 	//9
 	go RogueSet(&wg)
+	log.Print("Back inside ClassType after 9")
 	//10
 	go SorcererSet(&wg)
+	log.Print("Back inside ClassType after 10")
 	//11
 	go WarlockSet(&wg)
+	log.Print("Back inside ClassType after 11")
 	//12
 	go WizardSet(&wg)
+	log.Print("Back inside ClassType after 12")
 
 	wg.Wait()
-	log.Print("Done")
+	log.Print("Class Done")
 
 }
