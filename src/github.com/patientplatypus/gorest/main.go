@@ -1,6 +1,8 @@
 package main
 
 import (
+	"database/sql"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -20,10 +22,31 @@ const (
 )
 
 // var DB = config.Sql_connect()
-var DB config.Sqlconfig
+
+// var DB config.Sqlconfig
+
+// var DB *sql.DB
 
 func main() {
-	DB = config.Sql_config()
+	// DB = config.Sql_config()
+
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+		"password=%s dbname=%s sslmode=disable",
+		"localhost", 5432, "patientplatypus", "Fvnjty0b", "dungeon_world")
+	var err error
+	config.DB, err = sql.Open("postgres", psqlInfo)
+	if err != nil {
+		panic(err)
+	}
+	// defer db.Close()
+
+	err = config.DB.Ping()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Successfully connected~!")
+
 	router := NewRouter()
 	os.Setenv("ORIGIN_ALLOWED", "*")
 	headersOk := handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type"})

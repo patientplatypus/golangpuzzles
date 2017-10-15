@@ -15,7 +15,8 @@ type CharacterStruct struct {
 	Equipment                []string                      `json:"equipment"`
 	SkillsProficienciesSaves SkillsProficienciesAdvantages `json:"skillsproficienciesadvantages"`
 	Spells                   []string                      `json:"spells"`
-	Fluff                    Fluff                         `json:"fluf"`
+	Fluff                    Fluff                         `json:"fluff"`
+	CreationStage            string                        `json:"creationstage"`
 	UserInput                UserInput                     `json:"userinput"`
 }
 

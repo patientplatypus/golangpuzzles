@@ -100,12 +100,18 @@ var routes = Routes{
 	},
 	Route{
 		"NewCharacter",
-		"Post",
+		"POST",
 		"/createcharacter/newcharacter",
 		createcharacter.NewCharacter,
 	},
 	Route{
-		"NewCharacter",
+		"SavedCharacters",
+		"GET",
+		"/createcharacter/savedcharacters",
+		createcharacter.SavedCharacters,
+	},
+	Route{
+		"DeleteAllUsersCharacters",
 		"GET",
 		"/createcharacter/deletealluserscharacters",
 		createcharacter.DeleteAllUsersCharacters,

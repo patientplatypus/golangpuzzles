@@ -4,11 +4,33 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"net/http"
 
 	"github.com/patientplatypus/gorest/config"
 )
 
-func RegisterCharacter(charactername string) {
+func ReturnCharacterStart(charactername string, w http.ResponseWriter, r *http.Request) {
+	returncharacter := ACharacter{
+		CharactersName: charactername,
+		CharacterData: CharacterStruct{
+			UserInput: UserInput{
+				Choices: []Choices{
+					{ChoiceName: "character class",
+						Options:          []string{"Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"},
+						PlacementAddress: []string{"character", "characterdata", "raceclassbackground", "characterclass"}},
+					{ChoiceName: "character race",
+						Options:          []string{"Dwarf", "Elf", "Halfling", "Human", "Human", "Dragonborn", "Gnome", "Half Elf", "Half Orc", "Tiefling"},
+						PlacementAddress: []string{"character", "characterdata", "raceclassbackground", "characterrace"}},
+					{ChoiceName: "character background",
+						Options:          []string{"Acolyte", "Charlatan", "Criminal", "Entertainer", "Folk Hero", "Guild Artisan", "Hermit", "Noble", "Outlander", "Sage", "Sailor", "Soldier", "Urchin"},
+						PlacementAddress: []string{"character", "characterdata", "raceclassbackground", "characterrace"}},
+				}}},
+	}
+
+	json.NewEncoder(w).Encode(returncharacter)
+}
+
+func RegisterCharacter(charactername string, w http.ResponseWriter, r *http.Request) {
 	log.Print("inside register character")
 	log.Print("Charactername:", charactername)
 
@@ -51,6 +73,8 @@ func RegisterCharacter(charactername string) {
 
 		config.DB.QueryRow("insert into usercharacters (usernames, characters) values ($1, $2);", Username, datacharacter)
 
+		ReturnCharacterStart(charactername, w, r)
+
 	} else {
 		var databasecharacters UserCharacters
 		var datarows []byte
@@ -71,6 +95,19 @@ func RegisterCharacter(charactername string) {
 		if namealreadyused != true {
 			newcharacter := ACharacter{
 				CharactersName: charactername,
+				CharacterData: CharacterStruct{
+					UserInput: UserInput{
+						Choices: []Choices{
+							{ChoiceName: "character class",
+								Options:          []string{"Barbarian", "Bard", "Cleric", "Druid", "Fighter", "Monk", "Paladin", "Ranger", "Rogue", "Sorcerer", "Warlock", "Wizard"},
+								PlacementAddress: []string{"character", "characterdata", "raceclassbackground", "characterclass"}},
+							{ChoiceName: "character race",
+								Options:          []string{"Dwarf", "Elf", "Halfling", "Human", "Human", "Dragonborn", "Gnome", "Half Elf", "Half Orc", "Tiefling"},
+								PlacementAddress: []string{"character", "characterdata", "raceclassbackground", "characterrace"}},
+							{ChoiceName: "character background",
+								Options:          []string{"Acolyte", "Charlatan", "Criminal", "Entertainer", "Folk Hero", "Guild Artisan", "Hermit", "Noble", "Outlander", "Sage", "Sailor", "Soldier", "Urchin"},
+								PlacementAddress: []string{"character", "characterdata", "raceclassbackground", "characterrace"}},
+						}}},
 			}
 			databasecharacters.Character = append(databasecharacters.Character, newcharacter)
 
@@ -81,9 +118,11 @@ func RegisterCharacter(charactername string) {
 			}
 
 			config.DB.Query("UPDATE usercharacters SET characters=$1 where usernames=$2;", appendcharacter, Username)
+
+			ReturnCharacterStart(charactername, w, r)
+
 		} else {
 			log.Print("Character name already in use!")
 		}
-
 	}
 }

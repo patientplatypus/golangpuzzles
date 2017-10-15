@@ -1,0 +1,5 @@
+package createcharacter
+
+func RetrieveSavedCharacters() {
+
+}
